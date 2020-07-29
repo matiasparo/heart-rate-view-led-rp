@@ -39,28 +39,16 @@ async function execCommand({ cmd, message, ledMatrix }) {
         try {
 
             const child = exec(cmd);
-            child.stdout.on('data', (data)=>{
-                console.warn("[STDOUT][data]");
-                console.warn(data);
-            })
-            child.stderr.on("data", (data)=>{
-                console.error("[STDERR][err]");
-                console.error(data);
-            });
-            //child.stdout.pipe(process.stdout);
-            //child.stderr.pipe(process.stderr);
             child.on('exit', (status) => {
                 let msg = message;
                 if (status !== 0) {
-                    //console.warn('status != 0 command', cmd);
                     msg = null;
                 }
-                console.log(`[EXIT]TERMINO EJECUTAR CMD ${status}`);
                 resolve(msg);
             });
         } catch (err) {
             console.log(err);
-            resolve("el catch del child");
+            resolve(false);
         }
     });
 
@@ -72,37 +60,15 @@ function killProcess(grepPattern) {
     return new Promise((resolve, reject) => {
         try {
 
-            //console.log("VOY A MATAR DEMO!");
            /* const child = */
            exec(cmdKillProcess, (err, stdout, stderr)=>{
                if(err){
                    console.log(`error al ejectuar el comando ${cmdKillProcess}`);
                    console.log(err);
                }
-                console.log("el callback del exec killer");
-                console.log(`stdout ${stdout}`);
-                console.log(`stderr ${stderr}`);
                 resolve('x)');
             });
-           /* child.stdout.on('data', (data)=>{
-                console.warn("[k][data]");
-                console.warn(data);
-            })
-            child.stderr.on("data", (data)=>{
-                console.error("[k] err]");
-                console.error(data);
-            });
-            //child.stdout.pipe(process.stdout);
-            //child.stderr.pipe(process.stderr);
-            /*child.on('exit', (status) => {
-                let msg = "kill!";
-                if (status !== 0) {
-                    //console.warn('Line-161 err:command', cmdKillProcess);
-                    msg = null;
-                }
-                console.log(`[k]MATO PROCESO! ${status}`);
-                resolve(msg);
-            });*/
+           
         } catch (err) {
             console.log(err);
             resolve("[k]Catch kill");

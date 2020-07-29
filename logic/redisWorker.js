@@ -25,7 +25,7 @@ const onMessageStart = ()=>{
     
     var rsmq = worker._getRsmq();
 	worker.on('exceeded', function( msg ){
-		console.log( "EXCEEDED", msg.id );
+		//console.log( "EXCEEDED", msg.id );
 		// NOTE: make sure this queue exists
 		rsmq.sendMessage( "YOUR_EXCEEDED_QUEUE", msg, function( err, resp ){
 			if( err ){
@@ -44,13 +44,13 @@ const onMessageStart = ()=>{
                 message: message,
                 imageFile: `${message}.ppm`
             }).then(res => {
-                console.log("*********RETORNA EL RESOLVE A LA COLA");
-                sizeQueue();
+                //console.log("*********RETORNA EL RESOLVE A LA COLA");
+                //sizeQueue();
                 next();
             }).catch(err => {
-                console.log("**********EL RESOLVE DE LA COLA CATCH");
-                console.log(err);
-                sizeQueue();
+                //console.log("**********EL RESOLVE DE LA COLA CATCH");
+                //console.log(err);
+                //sizeQueue();
                 next();
             });   
         }catch(e){

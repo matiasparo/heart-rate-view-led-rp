@@ -1,0 +1,15 @@
+[Unit]
+Description=HeartRate Service
+
+[Service]
+ExecStart=/usr/local/bin/node /home/pi/heart_rate/index.js
+
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=heartrate-screen
+Environment=NODE_ENV=production PORT=3000
+
+[Install]
+WantedBy=multi-user.target

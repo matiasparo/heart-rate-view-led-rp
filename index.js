@@ -10,7 +10,7 @@ const utils = require('./logic/log');
 process.setMaxListeners(0);
 
 // parse application/x-www-form-urlencoded
- app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 // parse application/json
 app.use(bodyParser.json());
 
@@ -27,80 +27,60 @@ app.use((req, res, next) => {
 });
 
 
-app.post('/heart-rate', (req, res)=> {
-    var heartRate = req.body.heartRate;    
+app.post('/heart-rate', (req, res) => {
+    var heartRate = req.body.heartRate;
     utils.saveLog(`[INDEX]${heartRate}`);
     //mando la pulsacion a la cola de mensajes
-    rsmq.sendMessage(process.env.QNAME ,heartRate);
+    rsmq.sendMessage(process.env.QNAME, heartRate);
     res.status(200).json('impeca');
 });
 
-app.get('/heart-rate/stop', (req, res)=>{
+app.get('/heart-rate/stop', (req, res) => {
     //reseteo la pantalla
-    
+
     utils.saveLog("[INDEX]Stop");
     evoDeamon.stop();
-    rsmq.deleteQueue(process.env.QNAME, (err, resp)=>{
+    rsmq.deleteQueue(process.env.QNAME, (err, resp) => {
         screen.clearScreen();
-        utils.saveLog("[INDEX]****elimina cola****");
-        /*rsmq.createQueue(process.env.QNAME, (res)=>{
-            utils.saveLog(`[INDEX]****creo cola de mensaje ${res}`);
-        });*/
     });
-    res.status(200).json("listo");
+    res.status(200).json({ ok: true });
 });
 
-app.get('/heart-rate/start', (req,res)=>{
-    utils.saveLog("[INDEX]Start");
-    screen.clearScreen();
-    rsmq.deleteQueue(process.env.QNAME, (err, resp)=>{
-        utils.saveLog("[INDEX]****elimina cola****");
-        rsmq.createQueue(process.env.QNAME, (res)=>{
-            utils.saveLog(`[INDEX]****creo cola de mensaje ${res}`);
-            setTimeout(()=>{
-                evoDeamon.init();
-            }, 1000);
-        });
+app.get('/heart-rate/start', (req, res) => {
+    rsmq.createQueue(process.env.QNAME, (res) => {
+        setTimeout(() => {
+            evoDeamon.init();
+        }, 1000);
     });
-   
     res.status(200).json();
 });
 
- 
 
 
 
-app.listen(process.env.PORT, ()=>{
-    utils.saveLog(`INICIO EL SERVICIO EN EL PUERTO: ${process.env.PORT}`);
-    //inicio cola de mensajes
-    //crear cola
-    rsmq.createQueue(process.env.QNAME, (res)=>{
-        utils.saveLog("[INDEX]crear cola "+ res);
-        if(res){
+
+app.listen(process.env.PORT, () => {
+    //init queue
+    rsmq.createQueue(process.env.QNAME, (res) => {
+        if (res) {
             utils.saveLog("[INDEX]Cola Creada");
         }
     })
 
-    //mustro logo en pantalla para indicar que inciio
-    screen.initServer((resp)=>{
-        if(resp){
-            utils.saveLog("[INDEX]inicio la pantalla");
+    //logo is displayed on the screen
+    screen.initServer((resp) => {
+        if (resp) {
+            utils.saveLog("[INDEX]init screen");
         }
     });
 });
 
 
-process.on('exit', data =>{
-    utils.saveLog("[index]:el exit del process");
+process.on('exit', data => {
+    utils.saveLog("[index]:exit process");
     utils.saveLog(data);
 });
-process.on('uncaughtException', exc=>{
-    utils.saveLog("[INDEX]Exception");
+process.on('uncaughtException', exc => {
+    utils.saveLog("[INDEX]Exception service");
     utils.saveLog(exc);
 });
-process.stdout.on('data', (data)=>{
-    utils.saveLog("[INDEX][stdout] Data en el index");
-})
-process.stderr.on('data', ()=>{
-    utils.saveLog("[INDEX][stderr] Data en el index");
-})

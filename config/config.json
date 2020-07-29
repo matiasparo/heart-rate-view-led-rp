@@ -1,7 +1,7 @@
 {
-    "logo": "/home/pi/evo_rate/img/logo.ppm",
+    "logo": "/home/pi/heart_rate/img/logo.ppm",
     "initMessage": ":)",
-    "initImageFilename":"/home/pi/evo_rate/img/init.ppm",    
+    "initImageFilename":"/home/pi/heart_rate/img/init.ppm",    
     "ledMatrix": {
       "path": "/home/pi/rpi-rgb-led-matrix-master",
       "options": {

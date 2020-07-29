@@ -7,12 +7,11 @@ const rsmq = new RedisSMQ({host: "127.0.0.1",realtime:true});
 const createQueue = (name, callback)=>{
     utils.saveLog("quiero crear cola");
     rsmq.createQueue({qname: name,vt:10 }, function (err, resp) {
-        utils.saveLog(err);
-        utils.saveLog(resp);
+        // utils.saveLog(err);
+        // utils.saveLog(resp);
         if (resp===1) {
             callback(true);
         }else{
-            utils.saveLog(err);
             callback(false);
         }
 
@@ -26,7 +25,7 @@ const sendMessage = (name, message)=>{
     }
     rsmq.sendMessage({qname: name, message:message}, function (err, resp) {
         if(err){
-            utils.saveLog("Error al mandar mensaje");
+            utils.saveLog("Error to send message");
             utils.saveLog(err);
         }
         
