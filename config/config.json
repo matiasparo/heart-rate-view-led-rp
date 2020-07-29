@@ -1,0 +1,15 @@
+{
+    "logo": "/home/pi/evo_rate/img/logo.ppm",
+    "initMessage": ":)",
+    "initImageFilename":"/home/pi/evo_rate/img/init.ppm",    
+    "ledMatrix": {
+      "path": "/home/pi/rpi-rgb-led-matrix-master",
+      "options": {
+        "ledGpioMapping": "adafruit-hat",
+        "ledNoHardwarePulse": true,
+        "ledRows": 32,
+        "ledChain": 1
+      }
+    }
+  }
+  
